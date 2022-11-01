@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UrlShortener.Client.Models;
+using UrlShortener.Client.ViewModels;
 using UrlShortener.Models.Interfaces;
 
 namespace UrlShortener.Client.Controllers

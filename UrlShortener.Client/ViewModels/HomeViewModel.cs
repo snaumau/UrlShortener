@@ -1,6 +1,6 @@
 ﻿using UrlShortener.Models.Entities;
 
-namespace UrlShortener.Client.Models
+namespace UrlShortener.Client.ViewModels
 {
     public class HomeViewModel
     {
