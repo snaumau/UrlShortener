@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using UrlShortener.Core.Data;
+using UrlShortener.Core.Repositories;
+using UrlShortener.Models.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,10 @@ builder.Services.AddDbContext<UrlShortenerContext>(options =>
         mySqlOptions => mySqlOptions.EnableRetryOnFailure()
         ));
 
+builder.Services.AddScoped<IUrlRepository, UrlRepository>();
+
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
