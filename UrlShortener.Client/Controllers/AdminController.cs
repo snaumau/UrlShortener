@@ -57,6 +57,54 @@ namespace UrlShortener.Client.Controllers
             return View(dbEntry);
         }
 
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            var url = _urlRepository.GetUrl(id);
+            if (url == null)
+            {
+                return NotFound();
+            }
+            return View(url);
+        }
+
+        [HttpPut("{id")]
+        public IActionResult Update(int id, Url url)
+        {
+            if (id != url.Id)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(url);
+            }
+
+            try
+            {
+                _urlRepository.PutUrl(url);
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                ModelState.AddModelError(string.Empty,
+                    $@"Unable to save the record. {ex.Message}");
+                return View(url);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $@"Unable to save the record. {ex.Message}");
+                return View(url);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
         [HttpPost]
         public IActionResult Delete(Url url)
         {
