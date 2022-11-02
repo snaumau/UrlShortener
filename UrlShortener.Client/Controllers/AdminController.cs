@@ -57,12 +57,6 @@ namespace UrlShortener.Client.Controllers
             return View(dbEntry);
         }
 
-        [HttpGet]
-        public IActionResult Delete(int id)
-        {
-            return View();
-        }
-
         [HttpPost]
         public IActionResult Delete(Url url)
         {
