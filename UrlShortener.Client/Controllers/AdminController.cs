@@ -73,7 +73,7 @@ namespace UrlShortener.Client.Controllers
             return View(url);
         }
 
-        [HttpPut("{id")]
+        [HttpPut("{id}")]
         public IActionResult Update(int id, Url url)
         {
             if (id != url.Id)
