@@ -3,7 +3,9 @@
 <tbody>
     <tr>
         <th scope="row">@Model.UrlLong</th>
-        <td>@Model.UrlShort</td>
+        <td>
+            <a href="@Model.UrlLong" target="_blank">@Model.UrlShort</a>
+        </td>
         <td>@Model.CreatedAt</td>
         <td>@Model.Counter</td>
         <td>
