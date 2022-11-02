@@ -16,7 +16,7 @@ namespace UrlShortener.Core.Repositories
 
         public IQueryable<Url> GetAllUrl => _context.Urls;
 
-        public Url? GetUrl(int id)
+        public Url GetUrl(int? id)
         {
             return _context.Urls.Find(id);
         }
@@ -35,15 +35,8 @@ namespace UrlShortener.Core.Repositories
 
         public int DeleteUrl(Url url)
         {
-            var product = _context.Urls.Find(url);
-            _context.Urls.Remove(url);
+            _context.Entry(new Url { Id = url.Id }).State = EntityState.Deleted;
             return _context.SaveChanges();
         }
-
-        
-
-        
-
-        
     }
 }
