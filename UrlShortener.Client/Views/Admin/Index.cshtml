@@ -34,10 +34,7 @@
                     <td>@url.CreatedAt</td>
                     <td>@url.Counter</td>
                     <td>
-                        <form asp-controller="Admin" asp-action="Update" method="post">
-                            <input type="hidden" asp-for="@url.Id">
-                            <input type="submit" value="Update" class="btn btn-primary">
-                        </form>
+                        <a asp-action="Edit" asp-route-id="@url.Id" class="btn btn-primary">Edit</a>
                     </td>
                     <td>
                         <form asp-controller="Admin" asp-action="Delete" method="post">

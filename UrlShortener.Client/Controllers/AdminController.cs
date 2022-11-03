@@ -37,7 +37,7 @@ namespace UrlShortener.Client.Controllers
                 CreatedAt = DateTime.Now,
                 Counter = 0,
             };
-            
+
 
             if (dbEntry.UrlShort is null)
             {
@@ -73,8 +73,8 @@ namespace UrlShortener.Client.Controllers
             return View(url);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, Url url)
+        [HttpPost]
+        public IActionResult Edit(int id, Url url)
         {
             if (id != url.Id)
             {
