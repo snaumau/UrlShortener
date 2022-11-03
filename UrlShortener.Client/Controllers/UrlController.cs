@@ -125,7 +125,7 @@ namespace UrlShortener.Client.Controllers
             {
                 ModelState.AddModelError(string.Empty, $@"Unable to create record: {ex.Message}");
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
     }
 }
