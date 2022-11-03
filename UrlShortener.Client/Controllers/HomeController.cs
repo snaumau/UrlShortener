@@ -14,13 +14,10 @@ namespace UrlShortener.Client.Controllers
         }
 
         public IActionResult Index()
-        {
-            var homeViewModel = new HomeViewModel
+            => View(new HomeViewModel
             {
                 Urls = _urlRepository.GetAllUrl
-            };
-
-            return View(homeViewModel);
-        }
+                    .OrderByDescending(u => u.Id)
+            });
     }
 }
