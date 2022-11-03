@@ -1,4 +1,5 @@
-﻿@model IQueryable<Url>
+﻿@using UrlShortener.Client.Controllers
+@model IQueryable<Url>
 
 @{
     ViewBag.Title = "All urls";
@@ -23,9 +24,9 @@
                 <th scope="col"></th>
             </tr>
         </thead>
+        <tbody>
         @foreach (var url in Model.ToList())
         {
-            <tbody>
                 <tr>
                     <th scope="row">@url.UrlLong</th>
                     <td>
@@ -43,8 +44,7 @@
                         </form>
                     </td>
                 </tr>
-            </tbody>
         }
+        </tbody>
     </table>
-
 </div>
