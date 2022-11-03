@@ -29,6 +29,7 @@ namespace UrlShortener.Client.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Url url)
         {
             Url dbEntry = new Url
@@ -55,7 +56,7 @@ namespace UrlShortener.Client.Controllers
                 return View(url);
             }
 
-            return View(dbEntry);
+            return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
         [HttpGet]
@@ -75,6 +76,7 @@ namespace UrlShortener.Client.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Url url)
         {
             if (id != url.Id)
@@ -107,6 +109,7 @@ namespace UrlShortener.Client.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(Url url)
         {
             try

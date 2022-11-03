@@ -18,9 +18,12 @@ namespace UrlShortener.Models.Entities
 
         [Required(ErrorMessage = "Please enter data")]
         [DataType(DataType.Time)]
+        [Display(Name = "Date")]
         public DateTime CreatedAt { get; set; }
 
         [Required(ErrorMessage = "Please enter count")]
+        [Range(1, int.MaxValue)]
+        [DataType(DataType.Currency)]
         [Display(Name = "Please enter number of counter")]
         public int Counter { get; set; }
     }

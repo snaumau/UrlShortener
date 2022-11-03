@@ -9,6 +9,7 @@
 <div class="row">
     <div class="input-group">
         <form asp-action="Edit" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="CreatedAt" />
             <div class="form-check">
