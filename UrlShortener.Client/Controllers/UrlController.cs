@@ -6,11 +6,11 @@ using UrlShortener.Models.Interfaces;
 
 namespace UrlShortener.Client.Controllers
 {
-    public class AdminController : Controller
+    public class UrlController : Controller
     {
         private readonly IUrlRepository _urlRepository;
 
-        public AdminController(IUrlRepository urlRepository)
+        public UrlController(IUrlRepository urlRepository)
         {
             _urlRepository = urlRepository;
         }
