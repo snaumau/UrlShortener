@@ -18,7 +18,8 @@ namespace UrlShortener.Client.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View(_urlRepository.GetAllUrl);
+            return View(_urlRepository.GetAllUrl
+                .OrderByDescending(u => u.Id));
         }
 
         [HttpGet]
