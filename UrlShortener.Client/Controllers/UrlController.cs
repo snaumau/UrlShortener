@@ -29,9 +29,13 @@ namespace UrlShortener.Client.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Create(Url url)
         {
+            if (url.UrlLong is null)
+            {
+                return View(url);
+            }
+
             Url dbEntry = new Url
             {
                 UrlLong = url.UrlLong,
@@ -39,7 +43,6 @@ namespace UrlShortener.Client.Controllers
                 CreatedAt = DateTime.Now,
                 Counter = 0,
             };
-
 
             if (dbEntry.UrlShort is null)
             {
@@ -76,13 +79,12 @@ namespace UrlShortener.Client.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Url url)
         {
-            if (id != url.Id)
-            {
-                return BadRequest();
-            }
+            //if (id != url.Id)
+            //{
+            //    return BadRequest();
+            //}
 
             if (!ModelState.IsValid)
             {
@@ -109,7 +111,6 @@ namespace UrlShortener.Client.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Delete(Url url)
         {
             try
@@ -126,6 +127,35 @@ namespace UrlShortener.Client.Controllers
                 ModelState.AddModelError(string.Empty, $@"Unable to create record: {ex.Message}");
             }
             return RedirectToRoute(new { controller = "Home", action = "Index" });
+        }
+
+        [ActionName("Redirect")]
+        public ActionResult RedirectToUrl(int? id)
+        {
+            // Get model
+            var url = _urlRepository.GetUrl(id);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            // Get default url
+            string returnUrl = url.UrlLong;
+
+            // Increment counter
+            url.Counter++;
+            try
+            {
+                _urlRepository.PutUrl(url);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            // Redirect to default url
+            return Redirect(returnUrl);
         }
     }
 }
