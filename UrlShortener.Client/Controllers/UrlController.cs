@@ -81,10 +81,10 @@ namespace UrlShortener.Client.Controllers
         [HttpPost]
         public IActionResult Edit(int id, Url url)
         {
-            //if (id != url.Id)
-            //{
-            //    return BadRequest();
-            //}
+            if (id != url.Id)
+            {
+                return BadRequest();
+            }
 
             if (!ModelState.IsValid)
             {
