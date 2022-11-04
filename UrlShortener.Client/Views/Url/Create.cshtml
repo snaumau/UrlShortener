@@ -1,0 +1,32 @@
+﻿@model Url
+
+@{
+    ViewBag.Title = "Create link";
+}
+
+<h2>Create link</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post" role="form">
+            <div asp-validation-summary="All"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="UrlLong"></label>
+                <div>
+                    <span asp-validation-for="UrlLong" class="text-danger" />
+                </div>
+                <input type="url" asp-for="UrlLong" class="form-control" />
+            </div>
+            <input type="hidden" asp-for="UrlShort" />
+            <input type="hidden" asp-for="CreatedAt" />
+            <input type="hidden" asp-for="Counter" />
+            <br />
+            <div class="text-center">
+                <button class="btn btn-primary" type="submit">Save</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-info">Back to Home</a>
+            </div>
+        </form>
+    </div>
+</div>

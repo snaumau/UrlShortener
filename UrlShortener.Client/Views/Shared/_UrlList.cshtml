@@ -1,0 +1,18 @@
+﻿@model Url
+
+<tbody>
+    <tr>
+        <th scope="row">@Model.UrlLong</th>
+        <td>
+            <a asp-controller="Url" asp-action="Redirect" asp-route-id="@Model.Id" target="_blank">@Model.UrlShort</a>
+        </td>
+        <td>@Model.CreatedAt</td>
+        <td>@Model.Counter</td>
+        <td>
+            <form asp-controller="Url" asp-action="Delete" method="post">
+                <input type="hidden" asp-for="Id" />
+                <input type="submit" value="Delete" class="btn btn-danger" />
+            </form>
+        </td>
+    </tr>
+</tbody>

@@ -1,0 +1,51 @@
+﻿@model IQueryable<Url>
+
+@{
+    ViewBag.Title = "All urls";
+}
+
+<div class="row">
+    <div class="text-center">
+        <h2>List of shortener links</h2>
+    </div>
+    <div class="text-center">
+        <a asp-action="Create" class="btn btn-primary">Add Url</a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Long url</th>
+                <th scope="col">Short url</th>
+                <th scope="col">Created</th>
+                <th scope="col">Number of clicks</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var url in Model.ToList())
+        {
+                <tr>
+                    <th scope="row">@url.UrlLong</th>
+                    <td>
+                        <a asp-controller="Url" asp-action="Redirect" asp-route-id="@url.Id" target="_blank">
+                            @url.UrlShort
+                        </a>
+                    </td>
+                    <td>@url.CreatedAt</td>
+                    <td>@url.Counter</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@url.Id" class="btn btn-primary">Edit</a>
+                    </td>
+                    <td>
+                        <form asp-controller="Url" asp-action="Delete" method="post">
+                            <input type="hidden" asp-for="@url.Id" />
+                            <input type="submit" value="Delete" class="btn btn-danger" />
+                        </form>
+                    </td>
+                </tr>
+        }
+        </tbody>
+    </table>
+</div>

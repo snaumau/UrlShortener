@@ -1,0 +1,27 @@
+﻿@model HomeViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <div class="text-center">
+        <h2>List of shortener links</h2>
+    </div>
+
+    <table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Long url</th>
+            <th scope="col">Short url</th>
+            <th scope="col">Created</th>
+            <th scope="col">Number of clicks</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+        @foreach (var url in Model.Urls)
+        {
+            <partial name="_UrlList" model="url" />
+        }
+    </table>
+</div>
