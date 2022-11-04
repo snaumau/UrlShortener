@@ -9,10 +9,13 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create" method="post" role="form">
+            <div asp-validation-summary="All"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="UrlLong"></label>
-                <div><span asp-validation-for="UrlLong" class="text-danger"></span></div>
+                <div>
+                    <span asp-validation-for="UrlLong" class="text-danger" />
+                </div>
                 <input type="url" asp-for="UrlLong" class="form-control" />
             </div>
             <input type="hidden" asp-for="UrlShort" />
@@ -22,11 +25,8 @@
             <div class="text-center">
                 <button class="btn btn-primary" type="submit">Save</button>
                 <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-info">Back to Home</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index" class="btn btn-info">Back to List</a>
 </div>

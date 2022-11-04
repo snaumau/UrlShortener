@@ -29,7 +29,9 @@
                 <tr>
                     <th scope="row">@url.UrlLong</th>
                     <td>
-                        <a href="@url.UrlLong" target="_blank">@url.UrlShort</a>
+                        <a asp-controller="Url" asp-action="Redirect" asp-route-id="@url.Id" target="_blank">
+                            @url.UrlShort
+                        </a>
                     </td>
                     <td>@url.CreatedAt</td>
                     <td>@url.Counter</td>
