@@ -12,7 +12,7 @@ builder.Services.AddDbContext<UrlShortenerContext>(options =>
     options.UseMySql(
         connection,
         ServerVersion.Create(
-            new Version(10, 3, 36),
+            new Version(10, 3),
             ServerType.MariaDb),
         mySqlOptions => mySqlOptions.EnableRetryOnFailure()
         ));
