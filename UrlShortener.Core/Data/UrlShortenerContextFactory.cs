@@ -10,7 +10,7 @@ namespace UrlShortener.Core.Data
         {
             var optionsBuilder = new DbContextOptionsBuilder<UrlShortenerContext>();
             optionsBuilder.UseMySql(
-                @"Server=[SERVERNAME];Port=[PORT];Database=UrlShortener;Uid=[USERNAME];Pwd=[PASSWORD];",
+                @"Server=localhost;Port=3307;Database=UrlShortener;Uid=root;Pwd=04081202;",
                 ServerVersion.Create(
                     new Version(10, 3, 36),
                     ServerType.MariaDb),
