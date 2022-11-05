@@ -15,7 +15,7 @@ namespace UrlShortener.Core.Data
             optionsBuilder.UseMySql(
                 @"Server=[SERVERNAME];Port=[PORT];Database=UrlShortener;Uid=[USERNAME];Pwd=[PASSWORD];",
                 ServerVersion.Create(
-                    new Version(10, 3, 36),
+                    new Version(10, 3),
                     ServerType.MariaDb),
                 options => options.EnableRetryOnFailure());
         }

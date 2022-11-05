@@ -12,7 +12,7 @@ builder.Services.AddDbContext<UrlShortenerContext>(options =>
     options.UseMySql(
         connection,
         ServerVersion.Create(
-            new Version(10, 3, 36),
+            new Version(10, 3),
             ServerType.MariaDb),
         mySqlOptions => mySqlOptions.EnableRetryOnFailure()
         ));
@@ -23,6 +23,13 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var sevices = scope.ServiceProvider;
+    var context = sevices.GetRequiredService<UrlShortenerContext>();
+    context.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
