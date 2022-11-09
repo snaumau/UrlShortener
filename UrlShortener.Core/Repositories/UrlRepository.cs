@@ -40,9 +40,9 @@ namespace UrlShortener.Core.Repositories
             return _context.SaveChanges();
         }
 
-        public int DeleteUrl(Url url)
+        public int DeleteUrl(int id)
         {
-            _context.Entry(new Url { Id = url.Id }).State = EntityState.Deleted;
+            _context.Entry(new Url { Id = id }).State = EntityState.Deleted;
             return _context.SaveChanges();
         }
     }

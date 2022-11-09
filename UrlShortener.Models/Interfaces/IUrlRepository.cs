@@ -9,6 +9,6 @@ namespace UrlShortener.Models.Interfaces
         Url GetUrl(string? id);
         int PostUrl(Url url);
         int PutUrl(Url url);
-        int DeleteUrl(Url url);
+        int DeleteUrl(int id);
     }
 }
