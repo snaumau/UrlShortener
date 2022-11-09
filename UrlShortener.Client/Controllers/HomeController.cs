@@ -1,23 +1,44 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using UrlShortener.Client.DTOs;
 using UrlShortener.Client.ViewModels;
-using UrlShortener.Models.Interfaces;
 
 namespace UrlShortener.Client.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IUrlRepository _urlRepository;
+        private readonly string _baseUrl = "https://localhost:7234/api/url/";
 
-        public HomeController(IUrlRepository urlRepository)
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            _urlRepository = urlRepository;
+            var homeViewModel = new HomeViewModel();
+            var client = new HttpClient();
+            var response = await client.GetAsync(_baseUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                var urls = JsonConvert.DeserializeObject<List<UrlDto>>(await response.Content.ReadAsStringAsync());
+                homeViewModel.Urls = urls.ToList()
+                    .OrderByDescending(u => u.CreatedAt);
+                return View(homeViewModel);
+            }
+
+            return View();
         }
 
-        public IActionResult Index()
-            => View(new HomeViewModel
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Index(int id)
+        {
+            // Get model
+            var client = new HttpClient();
+            var response = await client.GetAsync($"{_baseUrl}/{id}");
+            if (response.IsSuccessStatusCode)
             {
-                Urls = _urlRepository.GetAllUrl
-                    .OrderByDescending(u => u.Id)
-            });
+                var url = JsonConvert.DeserializeObject<UrlDto>(await response.Content.ReadAsStringAsync());
+                var responseUri = $"{client.BaseAddress}";
+            }
+
+            return Redirect("");
+        }
     }
 }
