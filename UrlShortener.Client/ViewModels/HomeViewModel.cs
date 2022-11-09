@@ -1,9 +1,9 @@
-﻿using UrlShortener.Models.Entities;
+﻿using UrlShortener.Client.DTOs;
 
 namespace UrlShortener.Client.ViewModels
 {
     public class HomeViewModel
     {
-        public IQueryable<Url>? Urls { get; set; }
+        public IList<GetUrlsDto>? Urls { get; set; }
     }
 }
