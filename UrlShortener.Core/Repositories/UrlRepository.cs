@@ -21,6 +21,13 @@ namespace UrlShortener.Core.Repositories
             return _context.Urls.Find(id);
         }
 
+        public Url GetUrl(string id)
+        {
+            var urlShort = _context.Urls.Where(url => url.UrlShort == $"{id}");
+            Url url = urlShort.FirstOrDefault();
+            return _context.Urls.Find(url.Id);
+        }
+
         public int PostUrl(Url url)
         {
             _context.Urls.Add(url);
