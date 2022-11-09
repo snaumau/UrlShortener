@@ -1,4 +1,4 @@
-﻿namespace UrlShortener.API.DTOs
+﻿namespace UrlShortener.Client.DTOs
 {
     public class DeleteUrlDto
     {
