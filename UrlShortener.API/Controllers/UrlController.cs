@@ -23,7 +23,7 @@ namespace UrlShortener.API.Controllers
         public IActionResult GetUrls()
         {
             var urls = _urlRepository.GetAllUrl;
-            var records = _mapper.Map<List<GetUrlsDto>>(urls);
+            var records = _mapper.Map<List<UrlDto>>(urls);
             return Ok(records);
         }
 
@@ -36,7 +36,20 @@ namespace UrlShortener.API.Controllers
                 return NotFound();
             }
 
-            var urlDetailsDto = _mapper.Map<GetUrlDetailsDto>(url);
+            var urlDetailsDto = _mapper.Map<UrlDto>(url);
+            return Ok(urlDetailsDto);
+        }
+
+        [HttpGet("GetByString")]
+        public IActionResult GetUrl(string urlId)
+        {
+            var url = _urlRepository.GetUrl(urlId);
+            if (url is null)
+            {
+                return NotFound();
+            }
+
+            var urlDetailsDto = _mapper.Map<EditUrlDto>(url);
             return Ok(urlDetailsDto);
         }
 
@@ -73,10 +86,9 @@ namespace UrlShortener.API.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteUrl(DeleteUrlDto deleteUrlDto)
+        public IActionResult DeleteUrl(int id)
         {
-            var url = _mapper.Map<Url>(deleteUrlDto);
-            _urlRepository.DeleteUrl(url);
+            _urlRepository.DeleteUrl(id);
             return Ok();
         }
     }

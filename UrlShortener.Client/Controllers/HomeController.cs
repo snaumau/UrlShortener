@@ -40,9 +40,6 @@ namespace UrlShortener.Client.Controllers
             if (urlDto is null)
                 return NotFound();
 
-            // Save original link
-            //Uri redirectLink = urlDto.UrlLong;
-
             // Increment counter
             urlDto.Counter++;
             string json = JsonConvert.SerializeObject(urlDto);

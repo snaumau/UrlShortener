@@ -8,19 +8,20 @@ namespace UrlShortener.Client.Controllers
 {
     public class UrlController : Controller
     {
-        private readonly string _baseUrl = "https://localhost:7234/api/url/";
+        private readonly string _baseUrl = "https://localhost:7234/api/Url";
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> GetUrls()
         {
             var client = new HttpClient();
             var response = await client.GetAsync(_baseUrl);
             if (response.IsSuccessStatusCode)
             {
-                var urls = JsonConvert.DeserializeObject<List<GetUrlsDto>>(await response.Content.ReadAsStringAsync());
+                var urls = JsonConvert.DeserializeObject<List<UrlDto>>(await response.Content.ReadAsStringAsync());
+
                 return View(urls);
             }
-            return NotFound();
+            return View();
         }
 
         [HttpGet]
@@ -58,12 +59,15 @@ namespace UrlShortener.Client.Controllers
             }
 
             var url = await GetUrlRecord(id.Value);
-            return url != null
-                ? View(url)
-                : NotFound();
+
+            if (url == null)
+            {
+                return NotFound();
+            }
+            return View(url);
         }
 
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> Edit(int id, EditUrlDto editUrlDto)
         {
             if (id != editUrlDto.Id)
@@ -78,35 +82,35 @@ namespace UrlShortener.Client.Controllers
 
             var client = new HttpClient();
             string json = JsonConvert.SerializeObject(editUrlDto);
-            var response = await client.PostAsync($"{_baseUrl}/{editUrlDto.Id}",
+            var response = await client.PutAsync($"{_baseUrl}/?id={editUrlDto.Id}",
                 new StringContent(json, Encoding.UTF8, "application/json"));
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToRoute(new { controller = "Url", action = "GetUrls" });
             }
 
             return View(editUrlDto);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete(DeleteUrlDto deleteUrlDto)
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
         {
             var client = new HttpClient();
             HttpRequestMessage request = new HttpRequestMessage(
                 HttpMethod.Delete,
-                $"{_baseUrl}/{deleteUrlDto.Id}");
+                $"{_baseUrl}?id={id}");
             await client.SendAsync(request);
 
             return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
-        private async Task<GetUrlDetailsDto> GetUrlRecord(int id)
+        private async Task<UrlDto> GetUrlRecord(int id)
         {
             var client = new HttpClient();
             var response = await client.GetAsync($"{_baseUrl}/{id}");
             if (response.IsSuccessStatusCode)
             {
-                var url = JsonConvert.DeserializeObject<GetUrlDetailsDto>(await response.Content.ReadAsStringAsync());
+                var url = JsonConvert.DeserializeObject<UrlDto>(await response.Content.ReadAsStringAsync());
                 return url;
             }
 
