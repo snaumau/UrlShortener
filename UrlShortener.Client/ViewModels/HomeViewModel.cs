@@ -4,6 +4,6 @@ namespace UrlShortener.Client.ViewModels
 {
     public class HomeViewModel
     {
-        public IList<GetUrlsDto>? Urls { get; set; }
+        public IEnumerable<UrlDto>? Urls { get; set; }
     }
 }
