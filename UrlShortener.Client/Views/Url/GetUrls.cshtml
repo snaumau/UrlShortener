@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "All urls";
+    string hostUri = "https://localhost:7284";
 }
 
 <div class="row">
@@ -28,9 +29,9 @@
         {
                 <tr>
                     <th scope="row">@url.UrlLong</th>
-                    <td>S
+                    <td>
                         <a asp-controller="Home" asp-action="Index" asp-route-urlId="@url.UrlShort" target="_blank">
-                            @url.UrlShort
+                            @hostUri/@url.UrlShort
                         </a>
                     </td>
                     <td>@url.CreatedAt</td>
