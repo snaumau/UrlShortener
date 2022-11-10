@@ -8,7 +8,7 @@ namespace UrlShortener.Client.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly string _baseUrl = "https://localhost:7234/api/Url";
+        private readonly string _baseUrl = "https://localhost:7234/api/url";
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -18,8 +18,8 @@ namespace UrlShortener.Client.Controllers
             var response = await client.GetAsync(_baseUrl);
             if (response.IsSuccessStatusCode)
             {
-                var urls = JsonConvert.DeserializeObject<List<UrlDto>>(await response.Content.ReadAsStringAsync());
-                homeViewModel.Urls = urls.ToList()
+                var urls = JsonConvert.DeserializeObject<List<UrlDto>?>(await response.Content.ReadAsStringAsync());
+                homeViewModel.Urls = urls?.ToList()
                     .OrderByDescending(u => u.CreatedAt);
                 return View(homeViewModel);
             }
@@ -28,7 +28,7 @@ namespace UrlShortener.Client.Controllers
         }
 
         [HttpGet("{urlId}")]
-        public async Task<IActionResult> Index(string urlId, UrlDto urlDto)
+        public async Task<IActionResult> Index(string urlId, UrlDto? urlDto)
         {
             // Get model
             var client = new HttpClient();

@@ -8,7 +8,7 @@ namespace UrlShortener.Client.Controllers
 {
     public class UrlController : Controller
     {
-        private readonly string _baseUrl = "https://localhost:7234/api/Url";
+        private readonly string _baseUrl = "https://localhost:7234/api/url";
 
         [HttpGet]
         public async Task<IActionResult> GetUrls()
@@ -19,7 +19,8 @@ namespace UrlShortener.Client.Controllers
             {
                 var urls = JsonConvert.DeserializeObject<List<UrlDto>>(await response.Content.ReadAsStringAsync());
 
-                return View(urls);
+                return View(urls?
+                    .OrderByDescending(u => u.Id));
             }
             return View();
         }
@@ -104,7 +105,7 @@ namespace UrlShortener.Client.Controllers
             return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
-        private async Task<UrlDto> GetUrlRecord(int id)
+        private async Task<UrlDto?> GetUrlRecord(int id)
         {
             var client = new HttpClient();
             var response = await client.GetAsync($"{_baseUrl}/{id}");
