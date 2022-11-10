@@ -1,4 +1,4 @@
-﻿@model Url
+﻿@model UrlDto
 
 @{
     ViewBag.Title = "Edit";
@@ -10,34 +10,38 @@
     <div class="input-group">
         <form asp-action="Edit" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="CreatedAt" />
             <div class="form-check">
                 <label asp-for="UrlLong" />
                 <div>
                     <span asp-validation-for="UrlLong" class="text-black">Default url</span>
                 </div>
-                <input asp-for="UrlLong" class="form-check" />
+                <input required ="required" type="url" asp-for="UrlLong" class="form-check" />
             </div>
             <div class="form-check">
                 <label asp-for="UrlShort" />
                 <div>
                     <span asp-validation-for="UrlShort" class="text-black">Short url</span>
                 </div>
-                <input asp-for="UrlShort" class="form-check" />
+                <input required="required" type="text" asp-for="UrlShort" class="form-check" />
             </div>
             <div class="form-check">
                 <label asp-for="Counter" />
                 <div>
                     <span asp-validation-for="Counter" class="text-black">Counter</span>
                 </div>
-                <input asp-for="Counter" class="form-check" />
+                <input required="required" type="number" asp-for="Counter" class="form-check" />
             </div>
             <br />
             <div class="text-center">
                 <button class="btn btn-primary" type="submit" asp-route-Id="@Model.Id">Save</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                <a asp-action="GetUrls" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

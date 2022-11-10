@@ -21,6 +21,13 @@ namespace UrlShortener.Core.Repositories
             return _context.Urls.Find(id);
         }
 
+        public Url GetUrl(string id)
+        {
+            var urlShort = _context.Urls.Where(url => url.UrlShort == $"{id}");
+            Url url = urlShort.FirstOrDefault();
+            return _context.Urls.Find(url.Id);
+        }
+
         public int PostUrl(Url url)
         {
             _context.Urls.Add(url);
@@ -33,9 +40,9 @@ namespace UrlShortener.Core.Repositories
             return _context.SaveChanges();
         }
 
-        public int DeleteUrl(Url url)
+        public int DeleteUrl(int id)
         {
-            _context.Entry(new Url { Id = url.Id }).State = EntityState.Deleted;
+            _context.Entry(new Url { Id = id }).State = EntityState.Deleted;
             return _context.SaveChanges();
         }
     }

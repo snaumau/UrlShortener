@@ -17,7 +17,7 @@ namespace UrlShortener.Client.Services
                 num = num / _base;
             }
 
-            string shortUrl = $"https://shrtnr.io/{sb}";
+            string shortUrl = sb.ToString();
             return shortUrl;
         }
 

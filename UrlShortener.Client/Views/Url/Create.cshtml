@@ -1,4 +1,4 @@
-﻿@model Url
+﻿@model UrlDto
 
 @{
     ViewBag.Title = "Create link";
@@ -8,8 +8,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" method="post" role="form">
-            <input type="hidden" asp-for="Id" />
+        <form asp-action="Create" role="form">
             <div class="form-group">
                 <label asp-for="UrlLong"></label>
                 <div>
@@ -18,14 +17,15 @@
                 <input required="required" type="url" class="form-control scan" asp-for="UrlLong" class="form-control" />
             </div>
             <input type="hidden" asp-for="UrlShort" />
-            <input type="hidden" asp-for="CreatedAt" />
-            <input type="hidden" asp-for="Counter" />
             <br />
             <div class="text-center">
                 <button class="btn btn-primary" type="submit">Save</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-                <a asp-controller="Home" asp-action="Index" class="btn btn-info">Back to Home</a>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

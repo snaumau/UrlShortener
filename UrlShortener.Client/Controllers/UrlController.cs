@@ -1,25 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.Text;
+using UrlShortener.Client.DTOs;
 using UrlShortener.Client.Services;
-using UrlShortener.Models.Entities;
-using UrlShortener.Models.Interfaces;
 
 namespace UrlShortener.Client.Controllers
 {
     public class UrlController : Controller
     {
-        private readonly IUrlRepository _urlRepository;
-
-        public UrlController(IUrlRepository urlRepository)
-        {
-            _urlRepository = urlRepository;
-        }
+        private readonly string _baseUrl = "https://localhost:7234/api/Url";
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> GetUrls()
         {
-            return View(_urlRepository.GetAllUrl
-                .OrderByDescending(u => u.Id));
+            var client = new HttpClient();
+            var response = await client.GetAsync(_baseUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                var urls = JsonConvert.DeserializeObject<List<UrlDto>>(await response.Content.ReadAsStringAsync());
+
+                return View(urls);
+            }
+            return View();
         }
 
         [HttpGet]
@@ -29,48 +31,35 @@ namespace UrlShortener.Client.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Url url)
+        public async Task<IActionResult> Create(CreateUrlDto createUrlDto)
         {
-            if (url.UrlLong is null)
+            createUrlDto.UrlShort = UrlShortenerService.Encode(createUrlDto.UrlLong);
+
+            using (var client = new HttpClient())
             {
-                return View(url);
+                string json = JsonConvert.SerializeObject(createUrlDto);
+                var response = await client.PostAsync(
+                    _baseUrl,
+                    new StringContent(json, Encoding.UTF8, "application/json"));
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToRoute(new { controller = "Home", action = "Index" });
+                }
             }
 
-            Url dbEntry = new Url
-            {
-                UrlLong = url.UrlLong,
-                UrlShort = UrlShortenerService.Encode(url.UrlLong),
-                CreatedAt = DateTime.Now,
-                Counter = 0,
-            };
-
-            if (dbEntry.UrlShort is null)
-            {
-                return View(url);
-            }
-
-            try
-            {
-                _urlRepository.PostUrl(dbEntry);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, $@"Unable to create record: {ex.Message}");
-                return View(url);
-            }
-
-            return RedirectToRoute(new { controller = "Home", action = "Index" });
+            return View(createUrlDto);
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return BadRequest();
             }
 
-            var url = _urlRepository.GetUrl(id);
+            var url = await GetUrlRecord(id.Value);
+
             if (url == null)
             {
                 return NotFound();
@@ -79,83 +68,53 @@ namespace UrlShortener.Client.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, Url url)
+        public async Task<IActionResult> Edit(int id, EditUrlDto editUrlDto)
         {
-            if (id != url.Id)
+            if (id != editUrlDto.Id)
             {
                 return BadRequest();
             }
 
             if (!ModelState.IsValid)
             {
-                return View(url);
+                return View(editUrlDto);
             }
 
-            try
+            var client = new HttpClient();
+            string json = JsonConvert.SerializeObject(editUrlDto);
+            var response = await client.PutAsync($"{_baseUrl}/?id={editUrlDto.Id}",
+                new StringContent(json, Encoding.UTF8, "application/json"));
+            if (response.IsSuccessStatusCode)
             {
-                _urlRepository.PutUrl(url);
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                ModelState.AddModelError(string.Empty,
-                    $@"Unable to save the record. {ex.Message}");
-                return View(url);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, $@"Unable to save the record. {ex.Message}");
-                return View(url);
+                return RedirectToRoute(new { controller = "Url", action = "GetUrls" });
             }
 
-            return RedirectToAction(nameof(Index));
+            return View(editUrlDto);
         }
 
         [HttpPost]
-        public IActionResult Delete(Url url)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                _urlRepository.DeleteUrl(url);
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                ModelState.AddModelError(string.Empty,
-                    $@"Unable to delete record. Another user updated the record. {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, $@"Unable to create record: {ex.Message}");
-            }
+            var client = new HttpClient();
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                $"{_baseUrl}?id={id}");
+            await client.SendAsync(request);
+
             return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
-        [ActionName("Redirect")]
-        public ActionResult RedirectToUrl(int? id)
+        private async Task<UrlDto> GetUrlRecord(int id)
         {
-            // Get model
-            var url = _urlRepository.GetUrl(id);
-            if (!ModelState.IsValid)
+            var client = new HttpClient();
+            var response = await client.GetAsync($"{_baseUrl}/{id}");
+            if (response.IsSuccessStatusCode)
             {
-                return BadRequest();
+                var url = JsonConvert.DeserializeObject<UrlDto>(await response.Content.ReadAsStringAsync());
+                return url;
             }
 
-            // Get default url
-            string returnUrl = url.UrlLong;
-
-            // Increment counter
-            url.Counter++;
-            try
-            {
-                _urlRepository.PutUrl(url);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-            // Redirect to default url
-            return Redirect(returnUrl);
+            return null;
         }
     }
 }
