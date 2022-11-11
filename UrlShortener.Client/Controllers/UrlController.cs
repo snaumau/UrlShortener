@@ -19,8 +19,7 @@ namespace UrlShortener.Client.Controllers
             {
                 var urls = JsonConvert.DeserializeObject<List<UrlDto>>(await response.Content.ReadAsStringAsync());
 
-                return View(urls?
-                    .OrderByDescending(u => u.Id));
+                return View(urls);
             }
             return View();
         }
