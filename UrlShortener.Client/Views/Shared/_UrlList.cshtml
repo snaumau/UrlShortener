@@ -1,10 +1,14 @@
 ﻿@model UrlDto
 
+@{
+    string hostUri = "https://localhost:7284";
+}
+
 <tbody>
     <tr>
         <th scope="row">@Model.UrlLong</th>
         <td>
-            <a asp-controller="Home" asp-action="Index" asp-route-urlId="@Model.UrlShort" target="_blank">@Model.UrlShort</a>
+            <a asp-controller="Home" asp-action="Index" asp-route-urlId="@Model.UrlShort" target="_blank">@hostUri/@Model.UrlShort</a>
         </td>
         <td>@Model.CreatedAt</td>
         <td>@Model.Counter</td>
